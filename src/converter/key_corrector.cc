@@ -697,7 +697,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
     uint16_t output_codepoint2 = 0x0000; //出力２文字目
     switch (second_char) {
       case 0x3046:                  // "う"
-      　if (third_char == 0x3048){  // "え" ＠うえ＠
+        if (third_char == 0x3048){  // "え" ＠うえ＠
           output_codepoint1 = 0x3046;  // "う"
           output_codepoint2 = 0x3048;  // "え"
         } else if (third_char == 0x304B){ // "か" ＠うか＠
@@ -705,7 +705,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3048:                  // "え"
-      　if (third_char == 0x304D){  // "き" ＠えき＠
+        if (third_char == 0x304D){  // "き" ＠えき＠
           output_codepoint1 = 0x3048;  // "え"
           output_codepoint2 = 0x304D;  // "き"
         } else if (third_char == 0x3093){ // "ん" ＠えん＠
@@ -714,7 +714,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x304A:                  // "お"
-      　if (third_char == 0x304A){  // "お" ＠おお＠
+        if (third_char == 0x304A){  // "お" ＠おお＠
           output_codepoint1 = 0x304A;  // "お"
           output_codepoint2 = 0x304A;  // "お"
         } else if (third_char == 0x304F){ // "く" ＠おく＠
@@ -729,7 +729,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x304B:                  // "か"
-      　if (third_char == 0x3044){  // "い" ＠かい＠
+        if (third_char == 0x3044){  // "い" ＠かい＠
           output_codepoint1 = 0x304B;  // "か"
           output_codepoint2 = 0x3044;  // "い"
         } else if (third_char == 0x3048){ // "え" ＠かえ＠
@@ -744,13 +744,13 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x304C:                  // "が"
-      　if (third_char == 0x3044){  // "い" ＠がい＠
+        if (third_char == 0x3044){  // "い" ＠がい＠
           output_codepoint1 = 0x304B;  // "か"
           output_codepoint2 = 0x3044;  // "い"
         }
         break;
       case 0x304D:                  // "き"
-      　if (third_char == 0x305F){  // "た" ＠きた＠
+        if (third_char == 0x305F){  // "た" ＠きた＠
           output_codepoint1 = 0x304D;  // "き"
           output_codepoint2 = 0x305F;  // "た"
         } else if (third_char == 0x308D){ // "ろ" ＠きろ＠
@@ -759,31 +759,31 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x304F:                  // "く"
-      　if (third_char == 0x307F){  // "み" ＠くみ＠
+        if (third_char == 0x307F){  // "み" ＠くみ＠
           output_codepoint1 = 0x304F;  // "く"
           output_codepoint2 = 0x307F;  // "み"
         }
         break;
       case 0x3051:                  // "け"
-      　if (third_char == 0x3093){  // "ん" ＠けん＠
+        if (third_char == 0x3093){  // "ん" ＠けん＠
           output_codepoint1 = 0x3051;  // "け"
           output_codepoint2 = 0x3093;  // "ん"
         }
         break;
       case 0x3053:                  // "こ"
-      　if (third_char == 0x3046){  // "う" ＠こう＠
+        if (third_char == 0x3046){  // "う" ＠こう＠
           output_codepoint1 = 0x3053;  // "こ"
           output_codepoint2 = 0x3046;  // "う"
         }
         break;
       case 0x3054:                  // "ご"
-      　if (third_char == 0x3046){  // "う" ＠ごう＠
+        if (third_char == 0x3046){  // "う" ＠ごう＠
           output_codepoint1 = 0x3054;  // "ご"
           output_codepoint2 = 0x3046;  // "う"
         }
         break;
       case 0x3055:                  // "さ"
-      　if (third_char == 0x3044){  // "い" ＠さい＠
+        if (third_char == 0x3044){  // "い" ＠さい＠
           output_codepoint1 = 0x3055;  // "さ"
           output_codepoint2 = 0x3044;  // "い"
         } else if (third_char == 0x3064){ // "つ" ＠さつ＠
@@ -792,7 +792,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3057:                  // "し"
-      　if (third_char == 0x305f){  // "た" ＠した＠
+        if (third_char == 0x305f){  // "た" ＠した＠
           output_codepoint1 = 0x3057;  // "し"
           output_codepoint2 = 0x305f;  // "た"
         } else if (third_char == 0x3081){ // "め" ＠しめ＠
@@ -807,25 +807,25 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3058:                  // "じ"
-      　if (third_char == 0x3083){  // "ゃ" ＠じゃ＠
+        if (third_char == 0x3083){  // "ゃ" ＠じゃ＠
           output_codepoint1 = 0x3057;  // "し"
           output_codepoint2 = 0x3083;  // "ゃ"
         }
         break;
       case 0x305b:                  // "せ"
-      　if (third_char == 0x3093){  // "ん" ＠せん＠
+        if (third_char == 0x3093){  // "ん" ＠せん＠
           output_codepoint1 = 0x305b;  // "せ"
           output_codepoint2 = 0x3093;  // "ん"
         }
         break;
       case 0x305d:                  // "そ"
-      　if (third_char == 0x304f){  // "く" ＠そく＠
+        if (third_char == 0x304f){  // "く" ＠そく＠
           output_codepoint1 = 0x305d;  // "そ"
           output_codepoint2 = 0x304f;  // "く"
         }
         break;
       case 0x305f:                  // "た"
-      　if (third_char == 0x3044){  // "い" ＠たい＠
+        if (third_char == 0x3044){  // "い" ＠たい＠
           output_codepoint1 = 0x305f;  // "た"
           output_codepoint2 = 0x3044;  // "い"
         } else if (third_char == 0x304b){ // "か" ＠たか＠
@@ -834,7 +834,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3060:                  // "だ"
-      　if (third_char == 0x3044){  // "い" ＠だい＠
+        if (third_char == 0x3044){  // "い" ＠だい＠
           output_codepoint1 = 0x3060;  // "だ"
           output_codepoint2 = 0x3044;  // "い"
         } else if (third_char == 0x3093){ // "ん" ＠だん＠
@@ -843,13 +843,13 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3061:                  // "ち"
-      　if (third_char == 0x304b){  // "か" ＠ちか＠
+        if (third_char == 0x304b){  // "か" ＠ちか＠
           output_codepoint1 = 0x3061;  // "ち"
           output_codepoint2 = 0x304b;  // "か"
         }
         break;
       case 0x3064:                  // "つ"
-      　if (third_char == 0x3046){  // "う" ＠つう＠
+        if (third_char == 0x3046){  // "う" ＠つう＠
           output_codepoint1 = 0x3064;  // "つ"
           output_codepoint2 = 0x3046;  // "う"
         } else if (third_char == 0x307c){ // "ぼ" ＠つぼ＠
@@ -858,13 +858,13 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3066:                  // "て"
-      　if (third_char == 0x3093){  // "ん" ＠てん＠
+        if (third_char == 0x3093){  // "ん" ＠てん＠
           output_codepoint1 = 0x3066;  // "て"
           output_codepoint2 = 0x3093;  // "ん"
         }
         break;
       case 0x3068:                  // "と"
-      　if (third_char == 0x3046){  // "う" ＠とう＠
+        if (third_char == 0x3046){  // "う" ＠とう＠
           output_codepoint1 = 0x3068;  // "と"
           output_codepoint2 = 0x3046;  // "う"
         } else if (third_char == 0x3057){ // "し" ＠とし＠
@@ -882,7 +882,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3069:                  // "ど"
-      　if (third_char == 0x3046){  // "う" ＠どう＠
+        if (third_char == 0x3046){  // "う" ＠どう＠
           output_codepoint1 = 0x3069;  // "ど"
           output_codepoint2 = 0x3046;  // "う"
         } else if (third_char == 0x308b){ // "る" ＠どる＠
@@ -891,7 +891,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3068:                  // "な"
-      　if (third_char == 0x3046){  // "お" ＠なお＠
+        if (third_char == 0x3046){  // "お" ＠なお＠
           output_codepoint1 = 0x3068;  // "な"
           output_codepoint2 = 0x3046;  // "お"
         } else if (third_char == 0x3057){ // "が" ＠なが＠
@@ -903,7 +903,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x306b:                  // "に"
-      　if (third_char == 0x3057){  // "し" ＠にし＠
+        if (third_char == 0x3057){  // "し" ＠にし＠
           output_codepoint1 = 0x306b;  // "に"
           output_codepoint2 = 0x3057;  // "し"
         } else if (third_char == 0x3093){ // "ん" ＠にん＠
@@ -912,19 +912,19 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x306d:                  // "ね"
-      　if (third_char == 0x3093){  // "ん" ＠ねん＠
+        if (third_char == 0x3093){  // "ん" ＠ねん＠
           output_codepoint1 = 0x306d;  // "ね"
           output_codepoint2 = 0x3093;  // "ん"
         }
         break;
       case 0x306e:                  // "の"
-      　if (third_char == 0x3093){  // "ぞ" ＠のぞ＠
+        if (third_char == 0x3093){  // "ぞ" ＠のぞ＠
           output_codepoint1 = 0x306e;  // "の"
           output_codepoint2 = 0x3093;  // "ぞ"
         }
         break;
       case 0x306f:                  // "は"
-      　if (third_char == 0x3044){  // "い" ＠はい＠
+        if (third_char == 0x3044){  // "い" ＠はい＠
           output_codepoint1 = 0x306f;  // "は"
           output_codepoint2 = 0x3044;  // "い"
         } else if (third_char == 0x3055){ // "さ" ＠はさ＠
@@ -936,7 +936,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3070:                  // "ば"
-      　if (third_char == 0x3044){  // "い" ＠ばい＠
+        if (third_char == 0x3044){  // "い" ＠ばい＠
           output_codepoint1 = 0x3070;  // "ば"
           output_codepoint2 = 0x3044;  // "い"
         } else if (third_char == 0x3093){ // "ん" ＠ばん＠
@@ -945,7 +945,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3072:                  // "ひ"
-      　if (third_char == 0x304d){  // "き" ＠ひき＠
+        if (third_char == 0x304d){  // "き" ＠ひき＠
           output_codepoint1 = 0x3072;  // "ひ"
           output_codepoint2 = 0x304d;  // "き"
         } else if (third_char == 0x3064){ // "つ" ＠ひつ＠
@@ -957,13 +957,13 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3073:                  // "び"
-      　if (third_char == 0x3093){  // "ん" ＠びん＠
+        if (third_char == 0x3093){  // "ん" ＠びん＠
           output_codepoint1 = 0x3073;  // "び"
           output_codepoint2 = 0x3093;  // "ん"
         }
         break;
       case 0x3075:                  // "ふ"
-      　if (third_char == 0x308b){  // "る" ＠ふる＠
+        if (third_char == 0x308b){  // "る" ＠ふる＠
           output_codepoint1 = 0x3075;  // "ふ"
           output_codepoint2 = 0x308b;  // "る"
         } else if (third_char == 0x3093){ // "ん" ＠ふん＠
@@ -972,13 +972,13 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3078:                  // "へ"
-      　if (third_char == 0x3093){  // "ん" ＠へん＠
+        if (third_char == 0x3093){  // "ん" ＠へん＠
           output_codepoint1 = 0x3078;  // "へ"
           output_codepoint2 = 0x3093;  // "ん"
         }
         break;
       case 0x307b:                  // "ほ"
-      　if (third_char == 0x3046){  // "う" ＠ほう＠
+        if (third_char == 0x3046){  // "う" ＠ほう＠
           output_codepoint1 = 0x307b;  // "ほ"
           output_codepoint2 = 0x3046;  // "う"
         } else if (third_char == 0x3093){ // "ん" ＠ほん＠
@@ -987,13 +987,13 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x307c:                  // "ぼ"
-      　if (third_char == 0x3046){  // "う" ＠ぼう＠
+        if (third_char == 0x3046){  // "う" ＠ぼう＠
           output_codepoint1 = 0x307c;  // "ぼ"
           output_codepoint2 = 0x3046;  // "う"
         }
         break;
       case 0x307e:                  // "ま"
-      　if (third_char == 0x3044){  // "い" ＠まい＠
+        if (third_char == 0x3044){  // "い" ＠まい＠
           output_codepoint1 = 0x307e;  // "ま"
           output_codepoint2 = 0x3044;  // "い"
         } else if (third_char == 0x3093){ // "ん" ＠まん＠
@@ -1002,7 +1002,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x307f:                  // "み"
-      　if (third_char == 0x305b){  // "せ" ＠みせ＠
+        if (third_char == 0x305b){  // "せ" ＠みせ＠
           output_codepoint1 = 0x307f;  // "み"
           output_codepoint2 = 0x305b;  // "せ"
         } else if (third_char == 0x308a){ // "り" ＠みり＠
@@ -1011,44 +1011,44 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3080:                  // "む"
-      　if (third_char == 0x306d){  // "ね" ＠むね＠
+        if (third_char == 0x306d){  // "ね" ＠むね＠
           output_codepoint1 = 0x3080;  // "む"
           output_codepoint2 = 0x306d;  // "ね"
         }
         break;
       case 0x3081:                  // "め"
-      　if (third_char == 0x3044){  // "い" ＠めい＠
+        if (third_char == 0x3044){  // "い" ＠めい＠
           output_codepoint1 = 0x3081;  // "め"
           output_codepoint2 = 0x3044;  // "い"
         }
         break;
       case 0x3082:                  // "も"
-      　if (third_char == 0x3046){  // "う" ＠もう＠
+        if (third_char == 0x3046){  // "う" ＠もう＠
           output_codepoint1 = 0x3082;  // "も"
           output_codepoint2 = 0x3046;  // "う"
         }
         break;
       case 0x3084:                  // "や"
-      　if (third_char == 0x3081){  // "め" ＠やめ＠
+        if (third_char == 0x3081){  // "め" ＠やめ＠
           output_codepoint1 = 0x3084;  // "や"
           output_codepoint2 = 0x3081;  // "め"
         }
         break;
       case 0x3088:                  // "よ"
-      　if (third_char == 0x3046){  // "う" ＠よう＠
+        if (third_char == 0x3046){  // "う" ＠よう＠
           output_codepoint1 = 0x3088;  // "よ"
           output_codepoint2 = 0x3046;  // う"
         }
         break;
       case 0x3089:                  // "ら"
-      　if (third_char == 0x304b){  // "か" ＠らか＠
+        if (third_char == 0x304b){  // "か" ＠らか＠
           output_codepoint1 = 0x304b;  // "か"（出力は１文字だけ）
         } else if (third_char == 0x304d){ // "き" ＠らき＠
           output_codepoint1 = 0x304d;  // "き"（出力は１文字だけ）
         }
         break;
       case 0x308a:                  // "り"
-      　if (third_char == 0x304d){  // "き" ＠りき＠
+        if (third_char == 0x304d){  // "き" ＠りき＠
           output_codepoint1 = 0x304d;  // "き"（出力は１文字だけ）
         } else if (third_char == 0x3093){ // "ん" ＠りん＠
           output_codepoint1 = 0x308a;  // "り"
@@ -1056,7 +1056,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x308b:                  // "る"
-      　if (third_char == 0x3044){  // "い" ＠るい＠
+        if (third_char == 0x3044){  // "い" ＠るい＠
           output_codepoint1 = 0x3044;  // "い"（出力は１文字だけ）
         } else if (third_char == 0x304b){ // "か" ＠るか＠
           output_codepoint1 = 0x304b;  // "か"（出力は１文字だけ）
@@ -1067,7 +1067,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x308c:                  // "れ"
-      　if (third_char == 0x3044){  // "い" ＠れい＠
+        if (third_char == 0x3044){  // "い" ＠れい＠
           output_codepoint1 = 0x308c;  // "れ"
           output_codepoint2 = 0x3044;  // "い"
         } else if (third_char == 0x3064){ // "つ" ＠れつ＠
@@ -1076,14 +1076,14 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x308d:                  // "ろ"
-      　if (third_char == 0x304b){  // "か" ＠ろか＠
+        if (third_char == 0x304b){  // "か" ＠ろか＠
           output_codepoint1 = 0x304b;  // "か"（出力は１文字だけ）
         } else if (third_char == 0x3088){ // "よ" ＠ろよ＠
           output_codepoint1 = 0x3088;  // "よ"（出力は１文字だけ）      
         }
         break;
       case 0x308f:                  // "わ"
-      　if (third_char == 0x304b){  // "か" ＠わか＠
+        if (third_char == 0x304b){  // "か" ＠わか＠
           output_codepoint1 = 0x308f;  // "わ"
           output_codepoint2 = 0x304b;  // "か"
         } else if (third_char == 0x308a){ // "り" ＠わり＠
