@@ -576,6 +576,550 @@ bool RewriteParticleNO(size_t key_pos, const char *begin, const char *end,
   return true;
 }
 
+// "＠◯◯＠" pattern（最大７文字）
+// "＠◯◯＠" -> "◯◯"
+bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
+  size_t *mblen, std::string *output) {
+  const char32_t first_char = Util::Utf8ToCodepoint(begin, end, mblen);
+  if (first_char != 0xFF20 && first_char != 0x40) {  // !"＠@"
+    *mblen = 0;
+    return false;
+  }
+
+  if (begin + *mblen >= end) { //１文字目で終わりのとき
+    *mblen = 0;
+    return false;
+  }
+
+  size_t mblen2 = 0;
+  const char32_t second_char =
+  Util::Utf8ToCodepoint(begin + *mblen, end, &mblen2);
+
+  if (begin + *mblen + mblen2 >= end) { //２文字目で終わりのとき
+    *mblen = 0;
+    return false;
+  }
+
+  size_t mblen3 = 0;
+  const char32_t third_char =
+  Util::Utf8ToCodepoint(begin + *mblen + mblen2, end, &mblen3);
+
+  if (begin + *mblen + mblen2 + mblen3 >= end) { //３文字目で終わりのとき
+    if (third_char != 0xFF20 && third_char != 0x40) {  // !"＠@"
+      *mblen = 0;
+      return false;
+    }
+    uint16_t output_codepoint = 0x0000;
+    switch (second_char) {
+      case 0x3042:                  // "あ"
+        output_codepoint = 0x3042;  // "あ"
+        break;
+      case 0x3044:                  // "い"
+        output_codepoint = 0x3044;  // "い"
+        break;
+      case 0x304A:                  // "お"
+        output_codepoint = 0x304A;  // "お"
+        break;
+      case 0x304B:                  // "か"
+        output_codepoint = 0x304B;  // "か"
+        break;
+      case 0x304D:                  // "き"
+        output_codepoint = 0x304D;  // "き"
+        break;
+      case 0x3053:                  // "こ"
+        output_codepoint = 0x3053;  // "こ"
+        break;
+      case 0x3055:                  // "さ"
+        output_codepoint = 0x3055;  // "さ"
+        break;
+      case 0x3058:                  // "じ"
+        output_codepoint = 0x3058;  // "じ"
+        break;
+      case 0x3059:                  // "す"
+        output_codepoint = 0x3059;  // "す"
+        break;
+      case 0x305A:                  // "ず"
+        output_codepoint = 0x3058;  // "じ"
+        break;
+      case 0x3064:                  // "つ"
+        output_codepoint = 0x3064;  // "つ"
+        break;
+      case 0x3069:                  // "ど"
+        output_codepoint = 0x3069;  // "ど"
+        break;
+      case 0x306F:                  // "は"
+        output_codepoint = 0x306F;  // "は"
+        break;
+      case 0x3072:                  // "ひ"
+        output_codepoint = 0x3072;  // "ひ"
+        break;
+      case 0x3076:                  // "ぶ"
+        output_codepoint = 0x3076;  // "ぶ"
+        break;
+      case 0x307B:                  // "ほ"
+        output_codepoint = 0x307B;  // "ほ"
+        break;
+      case 0x3088:                  // "よ"
+        output_codepoint = 0x3088;  // "よ"
+        break;
+      case 0x308F:                  // "わ"
+        output_codepoint = 0x308F;  // "わ"
+        break;
+      default:
+        output_codepoint = 0x0000;
+        break;
+    }
+
+    if (output_codepoint != 0x0000) {
+      Util::CodepointToUtf8Append(output_codepoint, output);  // "表記指定外した読み"
+      *mblen += mblen2 + mblen3;
+      return true;
+    } else {
+      *mblen = 0;
+      return false;
+    }
+
+    *mblen = 0;
+    return false;
+  }
+
+  size_t mblen4 = 0;
+  const char32_t Fourth_char =
+  Util::Utf8ToCodepoint(begin + *mblen + mblen2 + mblen3, end, &mblen4);
+
+  if (begin + *mblen + mblen2 + mblen3 + mblen4 >= end) { //４文字目で終わりのとき
+    if (Fourth_char != 0xFF20 && Fourth_char != 0x40) {  // !"＠@"
+      *mblen = 0;
+      return false;
+    }
+
+    uint16_t output_codepoint1 = 0x0000; //出力１文字目
+    uint16_t output_codepoint2 = 0x0000; //出力２文字目
+    switch (second_char) {
+      case 0x3046:                  // "う"
+      　if (third_char == 0x3048){  // "え" ＠うえ＠
+          output_codepoint1 = 0x3046;  // "う"
+          output_codepoint2 = 0x3048;  // "え"
+        } else if (third_char == 0x304B){ // "か" ＠うか＠
+          output_codepoint1 = 0x304B;  // "か"（出力は１文字だけ）
+        }
+        break;
+      case 0x3048:                  // "え"
+      　if (third_char == 0x304D){  // "き" ＠えき＠
+          output_codepoint1 = 0x3048;  // "え"
+          output_codepoint2 = 0x304D;  // "き"
+        } else if (third_char == 0x3093){ // "ん" ＠えん＠
+          output_codepoint1 = 0x3048;  // "え"
+          output_codepoint2 = 0x3093;  // "ん"         
+        }
+        break;
+      case 0x304A:                  // "お"
+      　if (third_char == 0x304A){  // "お" ＠おお＠
+          output_codepoint1 = 0x304A;  // "お"
+          output_codepoint2 = 0x304A;  // "お"
+        } else if (third_char == 0x304F){ // "く" ＠おく＠
+          output_codepoint1 = 0x304A;  // "お"
+          output_codepoint2 = 0x304F;  // "く"         
+        } else if (third_char == 0x3082){ // "も" ＠おも＠
+          output_codepoint1 = 0x304A;  // "お"
+          output_codepoint2 = 0x3082;  // "も"         
+        } else if (third_char == 0x308F){ // "わ" ＠おわ＠
+          output_codepoint1 = 0x304A;  // "お"
+          output_codepoint2 = 0x308F;  // "わ"         
+        }
+        break;
+      case 0x304B:                  // "か"
+      　if (third_char == 0x3044){  // "い" ＠かい＠
+          output_codepoint1 = 0x304B;  // "か"
+          output_codepoint2 = 0x3044;  // "い"
+        } else if (third_char == 0x3048){ // "え" ＠かえ＠
+          output_codepoint1 = 0x304B;  // "か"
+          output_codepoint2 = 0x3048;  // "え"         
+        } else if (third_char == 0x304F){ // "く" ＠かく＠
+          output_codepoint1 = 0x304B;  // "か"
+          output_codepoint2 = 0x304F;  // "く"         
+        } else if (third_char == 0x3089){ // "ら" ＠から＠
+          output_codepoint1 = 0x304B;  // "か"
+          output_codepoint2 = 0x3089;  // "ら"         
+        }
+        break;
+      case 0x304C:                  // "が"
+      　if (third_char == 0x3044){  // "い" ＠がい＠
+          output_codepoint1 = 0x304B;  // "か"
+          output_codepoint2 = 0x3044;  // "い"
+        }
+        break;
+      case 0x304D:                  // "き"
+      　if (third_char == 0x305F){  // "た" ＠きた＠
+          output_codepoint1 = 0x304D;  // "き"
+          output_codepoint2 = 0x305F;  // "た"
+        } else if (third_char == 0x308D){ // "ろ" ＠きろ＠
+          output_codepoint1 = 0x304D;  // "き"
+          output_codepoint2 = 0x308D;  // "ろ"         
+        }
+        break;
+      case 0x304F:                  // "く"
+      　if (third_char == 0x307F){  // "み" ＠くみ＠
+          output_codepoint1 = 0x304F;  // "く"
+          output_codepoint2 = 0x307F;  // "み"
+        }
+        break;
+      case 0x3051:                  // "け"
+      　if (third_char == 0x3093){  // "ん" ＠けん＠
+          output_codepoint1 = 0x3051;  // "け"
+          output_codepoint2 = 0x3093;  // "ん"
+        }
+        break;
+      case 0x3053:                  // "こ"
+      　if (third_char == 0x3046){  // "う" ＠こう＠
+          output_codepoint1 = 0x3053;  // "こ"
+          output_codepoint2 = 0x3046;  // "う"
+        }
+        break;
+      case 0x3054:                  // "ご"
+      　if (third_char == 0x3046){  // "う" ＠ごう＠
+          output_codepoint1 = 0x3054;  // "ご"
+          output_codepoint2 = 0x3046;  // "う"
+        }
+        break;
+      case 0x3055:                  // "さ"
+      　if (third_char == 0x3044){  // "い" ＠さい＠
+          output_codepoint1 = 0x3055;  // "さ"
+          output_codepoint2 = 0x3044;  // "い"
+        } else if (third_char == 0x3064){ // "つ" ＠さつ＠
+          output_codepoint1 = 0x3055;  // "さ"
+          output_codepoint2 = 0x3064;  // "つ"         
+        }
+        break;
+      case 0x3057:                  // "し"
+      　if (third_char == 0x305f){  // "た" ＠した＠
+          output_codepoint1 = 0x3057;  // "し"
+          output_codepoint2 = 0x305f;  // "た"
+        } else if (third_char == 0x3081){ // "め" ＠しめ＠
+          output_codepoint1 = 0x3057;  // "し"
+          output_codepoint2 = 0x3081;  // "め"         
+        } else if (third_char == 0x3083){ // "ゃ" ＠しゃ＠
+          output_codepoint1 = 0x3057;  // "し"
+          output_codepoint2 = 0x3083;  // "ゃ"         
+        } else if (third_char == 0x3093){ // "ん" ＠しん＠
+          output_codepoint1 = 0x3057;  // "し"
+          output_codepoint2 = 0x3093;  // "ん"         
+        }
+        break;
+      case 0x3058:                  // "じ"
+      　if (third_char == 0x3083){  // "ゃ" ＠じゃ＠
+          output_codepoint1 = 0x3057;  // "し"
+          output_codepoint2 = 0x3083;  // "ゃ"
+        }
+        break;
+      case 0x305b:                  // "せ"
+      　if (third_char == 0x3093){  // "ん" ＠せん＠
+          output_codepoint1 = 0x305b;  // "せ"
+          output_codepoint2 = 0x3093;  // "ん"
+        }
+        break;
+      case 0x305d:                  // "そ"
+      　if (third_char == 0x304f){  // "く" ＠そく＠
+          output_codepoint1 = 0x305d;  // "そ"
+          output_codepoint2 = 0x304f;  // "く"
+        }
+        break;
+      case 0x305f:                  // "た"
+      　if (third_char == 0x3044){  // "い" ＠たい＠
+          output_codepoint1 = 0x305f;  // "た"
+          output_codepoint2 = 0x3044;  // "い"
+        } else if (third_char == 0x304b){ // "か" ＠たか＠
+          output_codepoint1 = 0x305f;  // "た"
+          output_codepoint2 = 0x304b;  // "か"         
+        }
+        break;
+      case 0x3060:                  // "だ"
+      　if (third_char == 0x3044){  // "い" ＠だい＠
+          output_codepoint1 = 0x3060;  // "だ"
+          output_codepoint2 = 0x3044;  // "い"
+        } else if (third_char == 0x3093){ // "ん" ＠だん＠
+          output_codepoint1 = 0x3060;  // "だ"
+          output_codepoint2 = 0x3093;  // "ん"         
+        }
+        break;
+      case 0x3061:                  // "ち"
+      　if (third_char == 0x304b){  // "か" ＠ちか＠
+          output_codepoint1 = 0x3061;  // "ち"
+          output_codepoint2 = 0x304b;  // "か"
+        }
+        break;
+      case 0x3064:                  // "つ"
+      　if (third_char == 0x3046){  // "う" ＠つう＠
+          output_codepoint1 = 0x3064;  // "つ"
+          output_codepoint2 = 0x3046;  // "う"
+        } else if (third_char == 0x307c){ // "ぼ" ＠つぼ＠
+          output_codepoint1 = 0x3064;  // "つ"
+          output_codepoint2 = 0x307c;  // "ぼ"         
+        }
+        break;
+      case 0x3066:                  // "て"
+      　if (third_char == 0x3093){  // "ん" ＠てん＠
+          output_codepoint1 = 0x3066;  // "て"
+          output_codepoint2 = 0x3093;  // "ん"
+        }
+        break;
+      case 0x3068:                  // "と"
+      　if (third_char == 0x3046){  // "う" ＠とう＠
+          output_codepoint1 = 0x3068;  // "と"
+          output_codepoint2 = 0x3046;  // "う"
+        } else if (third_char == 0x3057){ // "し" ＠とし＠
+          output_codepoint1 = 0x3068;  // "と"
+          output_codepoint2 = 0x3057;  // "し"         
+        } else if (third_char == 0x307e){ // "ま" ＠とま＠
+          output_codepoint1 = 0x3068;  // "と"
+          output_codepoint2 = 0x307e;  // "ま"     
+        } else if (third_char == 0x3081){ // "め" ＠とめ＠
+          output_codepoint1 = 0x3068;  // "と"
+          output_codepoint2 = 0x3081;  // "め"         
+        } else if (third_char == 0x3093){ // "ん" ＠とん＠
+          output_codepoint1 = 0x3068;  // "と"
+          output_codepoint2 = 0x3093;  // "ん"
+        }
+        break;
+      case 0x3069:                  // "ど"
+      　if (third_char == 0x3046){  // "う" ＠どう＠
+          output_codepoint1 = 0x3069;  // "ど"
+          output_codepoint2 = 0x3046;  // "う"
+        } else if (third_char == 0x308b){ // "る" ＠どる＠
+          output_codepoint1 = 0x3069;  // "ど"
+          output_codepoint2 = 0x308b;  // "る"         
+        }
+        break;
+      case 0x3068:                  // "な"
+      　if (third_char == 0x3046){  // "お" ＠なお＠
+          output_codepoint1 = 0x3068;  // "な"
+          output_codepoint2 = 0x3046;  // "お"
+        } else if (third_char == 0x3057){ // "が" ＠なが＠
+          output_codepoint1 = 0x3068;  // "な"
+          output_codepoint2 = 0x3057;  // "が"         
+        } else if (third_char == 0x307e){ // "ら" ＠なら＠
+          output_codepoint1 = 0x3068;  // "な"
+          output_codepoint2 = 0x307e;  // "ら"     
+        }
+        break;
+      case 0x306b:                  // "に"
+      　if (third_char == 0x3057){  // "し" ＠にし＠
+          output_codepoint1 = 0x306b;  // "に"
+          output_codepoint2 = 0x3057;  // "し"
+        } else if (third_char == 0x3093){ // "ん" ＠にん＠
+          output_codepoint1 = 0x306b;  // "に"
+          output_codepoint2 = 0x3093;  // "ん"         
+        }
+        break;
+      case 0x306d:                  // "ね"
+      　if (third_char == 0x3093){  // "ん" ＠ねん＠
+          output_codepoint1 = 0x306d;  // "ね"
+          output_codepoint2 = 0x3093;  // "ん"
+        }
+        break;
+      case 0x306e:                  // "の"
+      　if (third_char == 0x3093){  // "ぞ" ＠のぞ＠
+          output_codepoint1 = 0x306e;  // "の"
+          output_codepoint2 = 0x3093;  // "ぞ"
+        }
+        break;
+      case 0x306f:                  // "は"
+      　if (third_char == 0x3044){  // "い" ＠はい＠
+          output_codepoint1 = 0x306f;  // "は"
+          output_codepoint2 = 0x3044;  // "い"
+        } else if (third_char == 0x3055){ // "さ" ＠はさ＠
+          output_codepoint1 = 0x306f;  // "は"
+          output_codepoint2 = 0x3055;  // "さ"         
+        } else if (third_char == 0x3064){ // "つ" ＠はつ＠
+          output_codepoint1 = 0x306f;  // "は"
+          output_codepoint2 = 0x3064;  // "つ"         
+        }
+        break;
+      case 0x3070:                  // "ば"
+      　if (third_char == 0x3044){  // "い" ＠ばい＠
+          output_codepoint1 = 0x3070;  // "ば"
+          output_codepoint2 = 0x3044;  // "い"
+        } else if (third_char == 0x3093){ // "ん" ＠ばん＠
+          output_codepoint1 = 0x3070;  // "ば"
+          output_codepoint2 = 0x3093;  // "ん"         
+        }
+        break;
+      case 0x3072:                  // "ひ"
+      　if (third_char == 0x304d){  // "き" ＠ひき＠
+          output_codepoint1 = 0x3072;  // "ひ"
+          output_codepoint2 = 0x304d;  // "き"
+        } else if (third_char == 0x3064){ // "つ" ＠ひつ＠
+          output_codepoint1 = 0x3072;  // "ひ"
+          output_codepoint2 = 0x3064;  // "つ"         
+        } else if (third_char == 0x308d){ // "ろ" ＠ひろ＠
+          output_codepoint1 = 0x3072;  // "ひ"
+          output_codepoint2 = 0x308d;  // "ろ"         
+        }
+        break;
+      case 0x3073:                  // "び"
+      　if (third_char == 0x3093){  // "ん" ＠びん＠
+          output_codepoint1 = 0x3073;  // "び"
+          output_codepoint2 = 0x3093;  // "ん"
+        }
+        break;
+      case 0x3075:                  // "ふ"
+      　if (third_char == 0x308b){  // "る" ＠ふる＠
+          output_codepoint1 = 0x3075;  // "ふ"
+          output_codepoint2 = 0x308b;  // "る"
+        } else if (third_char == 0x3093){ // "ん" ＠ふん＠
+          output_codepoint1 = 0x3075;  // "ふ"
+          output_codepoint2 = 0x3093;  // "ん"         
+        }
+        break;
+      case 0x3078:                  // "へ"
+      　if (third_char == 0x3093){  // "ん" ＠へん＠
+          output_codepoint1 = 0x3078;  // "へ"
+          output_codepoint2 = 0x3093;  // "ん"
+        }
+        break;
+      case 0x307b:                  // "ほ"
+      　if (third_char == 0x3046){  // "う" ＠ほう＠
+          output_codepoint1 = 0x307b;  // "ほ"
+          output_codepoint2 = 0x3046;  // "う"
+        } else if (third_char == 0x3093){ // "ん" ＠ほん＠
+          output_codepoint1 = 0x307b;  // "ほ"
+          output_codepoint2 = 0x3093;  // "ん"         
+        }
+        break;
+      case 0x307c:                  // "ぼ"
+      　if (third_char == 0x3046){  // "う" ＠ぼう＠
+          output_codepoint1 = 0x307c;  // "ぼ"
+          output_codepoint2 = 0x3046;  // "う"
+        }
+        break;
+      case 0x307e:                  // "ま"
+      　if (third_char == 0x3044){  // "い" ＠まい＠
+          output_codepoint1 = 0x307e;  // "ま"
+          output_codepoint2 = 0x3044;  // "い"
+        } else if (third_char == 0x3093){ // "ん" ＠まん＠
+          output_codepoint1 = 0x307e;  // "ま"
+          output_codepoint2 = 0x3093;  // "ん"         
+        }
+        break;
+      case 0x307f:                  // "み"
+      　if (third_char == 0x305b){  // "せ" ＠みせ＠
+          output_codepoint1 = 0x307f;  // "み"
+          output_codepoint2 = 0x305b;  // "せ"
+        } else if (third_char == 0x308a){ // "り" ＠みり＠
+          output_codepoint1 = 0x307f;  // "み"
+          output_codepoint2 = 0x308a;  // "り"         
+        }
+        break;
+      case 0x3080:                  // "む"
+      　if (third_char == 0x306d){  // "ね" ＠むね＠
+          output_codepoint1 = 0x3080;  // "む"
+          output_codepoint2 = 0x306d;  // "ね"
+        }
+        break;
+      case 0x3081:                  // "め"
+      　if (third_char == 0x3044){  // "い" ＠めい＠
+          output_codepoint1 = 0x3081;  // "め"
+          output_codepoint2 = 0x3044;  // "い"
+        }
+        break;
+      case 0x3082:                  // "も"
+      　if (third_char == 0x3046){  // "う" ＠もう＠
+          output_codepoint1 = 0x3082;  // "も"
+          output_codepoint2 = 0x3046;  // "う"
+        }
+        break;
+      case 0x3084:                  // "や"
+      　if (third_char == 0x3081){  // "め" ＠やめ＠
+          output_codepoint1 = 0x3084;  // "や"
+          output_codepoint2 = 0x3081;  // "め"
+        }
+        break;
+      case 0x3088:                  // "よ"
+      　if (third_char == 0x3046){  // "う" ＠よう＠
+          output_codepoint1 = 0x3088;  // "よ"
+          output_codepoint2 = 0x3046;  // う"
+        }
+        break;
+      case 0x3089:                  // "ら"
+      　if (third_char == 0x304b){  // "か" ＠らか＠
+          output_codepoint1 = 0x304b;  // "か"（出力は１文字だけ）
+        } else if (third_char == 0x304d){ // "き" ＠らき＠
+          output_codepoint1 = 0x304d;  // "き"（出力は１文字だけ）
+        }
+        break;
+      case 0x308a:                  // "り"
+      　if (third_char == 0x304d){  // "き" ＠りき＠
+          output_codepoint1 = 0x304d;  // "き"（出力は１文字だけ）
+        } else if (third_char == 0x3093){ // "ん" ＠りん＠
+          output_codepoint1 = 0x308a;  // "り"
+          output_codepoint2 = 0x3093;  // "ん"         
+        }
+        break;
+      case 0x308b:                  // "る"
+      　if (third_char == 0x3044){  // "い" ＠るい＠
+          output_codepoint1 = 0x3044;  // "い"（出力は１文字だけ）
+        } else if (third_char == 0x304b){ // "か" ＠るか＠
+          output_codepoint1 = 0x304b;  // "か"（出力は１文字だけ）
+        } else if (third_char == 0x3057){ // "し" ＠るし＠
+          output_codepoint1 = 0x3057;  // "し"（出力は１文字だけ）
+        } else if (third_char == 0x3088){ // "よ" ＠るよ＠
+          output_codepoint1 = 0x3088;  // "よ"（出力は１文字だけ）
+        }
+        break;
+      case 0x308c:                  // "れ"
+      　if (third_char == 0x3044){  // "い" ＠れい＠
+          output_codepoint1 = 0x308c;  // "れ"
+          output_codepoint2 = 0x3044;  // "い"
+        } else if (third_char == 0x3064){ // "つ" ＠れつ＠
+          output_codepoint1 = 0x308c;  // "れ"
+          output_codepoint2 = 0x3064;  // "つ"         
+        }
+        break;
+      case 0x308d:                  // "ろ"
+      　if (third_char == 0x304b){  // "か" ＠ろか＠
+          output_codepoint1 = 0x304b;  // "か"（出力は１文字だけ）
+        } else if (third_char == 0x3088){ // "よ" ＠ろよ＠
+          output_codepoint1 = 0x3088;  // "よ"（出力は１文字だけ）      
+        }
+        break;
+      case 0x308f:                  // "わ"
+      　if (third_char == 0x304b){  // "か" ＠わか＠
+          output_codepoint1 = 0x308f;  // "わ"
+          output_codepoint2 = 0x304b;  // "か"
+        } else if (third_char == 0x308a){ // "り" ＠わり＠
+          output_codepoint1 = 0x308f;  // "わ"
+          output_codepoint2 = 0x308a;  // "り"         
+        }
+        break;
+      default:
+        output_codepoint1 = 0x0000;
+        output_codepoint2 = 0x0000;
+        break;
+    }
+
+    if (output_codepoint1 != 0x0000) {
+      Util::CodepointToUtf8Append(output_codepoint1, output);  // "表記指定外した読み１"
+      if (output_codepoint2 != 0x0000) {
+        Util::CodepointToUtf8Append(output_codepoint2, output);  // "表記指定外した読み２"
+      }
+      *mblen += mblen2 + mblen3 + mblen4;
+      return true;
+    } else {
+      *mblen = 0;
+      return false;
+    }
+
+    *mblen = 0;
+    return false;
+  }
+
+  //ここから＠の３文字の表記指定書いていく～７文字まで
+
+
+
+
+
+}
 // Not implemented yet, as they looks minor
 // "[子音][ゃゅょ][^う]" Pattern
 // "きゅ[^う] -> きゅう"
@@ -683,6 +1227,7 @@ bool KeyCorrector::CorrectKey(absl::string_view key, InputMode mode,
          !RewriteNI(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteSmallTSU(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteParticleNO(key_pos, begin, end, &mblen, &corrected_key_) &&
+         !RewriteSpecifiedWord(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteM(key_pos, begin, end, &mblen, &corrected_key_))) {
       const char32_t codepoint = Util::Utf8ToCodepoint(begin, end, &mblen);
       Util::CodepointToUtf8Append(codepoint, &corrected_key_);
