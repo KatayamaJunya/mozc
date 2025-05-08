@@ -1180,7 +1180,6 @@ bool KeyCorrector::CorrectKey(absl::string_view key, InputMode mode,
          !RewriteYu(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteNI(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteSmallTSU(key_pos, begin, end, &mblen, &corrected_key_) &&
-         !RewriteParticleNO(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteSpecifiedWord(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteM(key_pos, begin, end, &mblen, &corrected_key_))) {
       const char32_t codepoint = Util::Utf8ToCodepoint(begin, end, &mblen);
