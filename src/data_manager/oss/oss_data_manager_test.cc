@@ -53,10 +53,22 @@ class OssDataManagerTest : public DataManagerTestBase {
             mozc::testing::GetSourceFilesInDirOrDie(
                 {MOZC_DICT_DIR_COMPONENTS, "dictionary_oss"},
 #ifdef MOZC_GYP_BUILD
-                {"dictionary00.txt", "dictionary01.txt", "dictionary02.txt",
-                 "dictionary03.txt", "dictionary04.txt", "dictionary05.txt",
-                 "dictionary06.txt", "dictionary07.txt", "dictionary08.txt",
-                 "dictionary09.txt"}
+                {"mozcdic-ut0425あ.txt", "mozcdic-ut0425い.txt", "mozcdic-ut0425う.txt",
+                 "mozcdic-ut0425え.txt", "mozcdic-ut0425お.txt", "mozcdic-ut0425か.txt",
+                 "mozcdic-ut0425き.txt", "mozcdic-ut0425く.txt", "mozcdic-ut0425け.txt",
+                 "mozcdic-ut0425こ.txt", "mozcdic-ut0425さ.txt", "mozcdic-ut0425し.txt",
+                 "mozcdic-ut0425す.txt", "mozcdic-ut0425せ.txt", "mozcdic-ut0425そ.txt",
+                 "mozcdic-ut0425た.txt", "mozcdic-ut0425ち.txt", "mozcdic-ut0425つ.txt",
+                 "mozcdic-ut0425て.txt", "mozcdic-ut0425と.txt", "mozcdic-ut0425な.txt",
+                 "mozcdic-ut0425に.txt", "mozcdic-ut0425ぬ.txt", "mozcdic-ut0425ね.txt",
+                 "mozcdic-ut0425の.txt", "mozcdic-ut0425は.txt", "mozcdic-ut0425ひ.txt",
+                 "mozcdic-ut0425ふ.txt", "mozcdic-ut0425へ.txt", "mozcdic-ut0425ほ.txt",
+                 "mozcdic-ut0425ま.txt", "mozcdic-ut0425み.txt", "mozcdic-ut0425む.txt",
+                 "mozcdic-ut0425め.txt", "mozcdic-ut0425も.txt", "mozcdic-ut0425や.txt",
+                 "mozcdic-ut0425ゆ.txt", "mozcdic-ut0425よ.txt", "mozcdic-ut0425ら.txt",
+                 "mozcdic-ut0425り.txt", "mozcdic-ut0425る.txt", "mozcdic-ut0425れ.txt",
+                 "mozcdic-ut0425ろ.txt", "mozcdic-ut0425わ.txt", "mozcdic-ut0425を.txt",
+                 "mozcdic-ut0425ん.txt"}
 #else  // MOZC_GYP_BUILD
                 {"aux_dictionary.txt", "dictionary.txt"}
 #endif  // MOZC_GYP_BUILD
