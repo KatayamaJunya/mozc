@@ -614,12 +614,9 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
   const char32_t third_char =
   Util::Utf8ToCodepoint(begin + *mblen + mblen2, end, &mblen3);
 
-  if (begin + *mblen + mblen2 + mblen3 >= end) { //３文字目で終わりのとき
-    if (third_char != 0xFF20 && third_char != 0x40) {  // !"＠@"
-      *mblen = 0;
-      return false;
-    }
-    uint16_t output_codepoint = 0x0000;
+  uint16_t output_codepoint = 0x0000;
+  bool is_hited_at_third = false;  // ３文字目で該当したかどうか
+  if (third_char == 0xFF20 || third_char == 0x40) {  // "＠@"  ＠◯＠のとき
     switch (second_char) {
       case 0x3042:                  // "あ"
         output_codepoint = 0x3042;  // "あ"
@@ -682,29 +679,28 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
 
     if (output_codepoint != 0x0000) {
       Util::CodepointToUtf8Append(output_codepoint, output);  // "表記指定外した読み"
-      *mblen += mblen2 + mblen3;
-      return true;
-    } else {
-      *mblen = 0;
-      return false;
+      if (begin + *mblen + mblen2 + mblen3 >= end) { //３文字目で終わりのとき
+        *mblen += mblen2 + mblen3;
+        return true;
+      }
+      is_hited_at_third = true
     }
 
+  }
+
+  if (begin + *mblen + mblen2 + mblen3 >= end) { //３文字目で終わりのとき
     *mblen = 0;
     return false;
   }
 
   size_t mblen4 = 0;
-  const char32_t Fourth_char =
+  const char32_t fourth_char =
   Util::Utf8ToCodepoint(begin + *mblen + mblen2 + mblen3, end, &mblen4);
 
-  if (begin + *mblen + mblen2 + mblen3 + mblen4 >= end) { //４文字目で終わりのとき
-    if (Fourth_char != 0xFF20 && Fourth_char != 0x40) {  // !"＠@"
-      *mblen = 0;
-      return false;
-    }
-
-    uint16_t output_codepoint1 = 0x0000; //出力１文字目
-    uint16_t output_codepoint2 = 0x0000; //出力２文字目
+  uint16_t output_codepoint1 = 0x0000; //出力１文字目
+  uint16_t output_codepoint2 = 0x0000; //出力２文字目
+  bool is_hited_at_fourth = false;  // ４文字目で該当したかどうか
+  if (fourth_char == 0xFF20 || fourth_char == 0x40) {  // "＠@"  ＠◯◯＠のとき
     switch (second_char) {
       case 0x3046:                  // "う"
         if (third_char == 0x3048){  // "え" ＠うえ＠
@@ -1112,17 +1108,35 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
       if (output_codepoint2 != 0x0000) {
         Util::CodepointToUtf8Append(output_codepoint2, output);  // "表記指定外した読み２"
       }
-      *mblen += mblen2 + mblen3 + mblen4;
+      if (begin + *mblen + mblen2 + mblen3 + mblen4 >= end) { //４文字目で終わりのとき
+        *mblen += mblen2 + mblen3 + mblen4;
+        return true;
+      }
+      is_hited_at_fourth = true
+    }
+    
+  }
+  
+  if (begin + *mblen + mblen2 + mblen3 + mblen4 >= end) { //４文字目で終わりのとき
+    if (is_hited_at_third) {
+      *mblen += mblen2 + mblen3;
       return true;
     } else {
       *mblen = 0;
       return false;
     }
-
-    *mblen = 0;
-    return false;
   }
+
+
   //ここから＠の３文字の表記指定書いていく～７文字まで
+
+
+
+
+
+
+
+
 }
 
 
