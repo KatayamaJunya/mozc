@@ -683,7 +683,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         *mblen += mblen2 + mblen3;
         return true;
       }
-      is_hited_at_third = true
+      is_hited_at_third = true;
     }
 
   }
@@ -1112,7 +1112,7 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
         *mblen += mblen2 + mblen3 + mblen4;
         return true;
       }
-      is_hited_at_fourth = true
+      is_hited_at_fourth = true;
     }
     
   }
