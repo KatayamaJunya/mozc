@@ -588,7 +588,7 @@ return true;
 
 // "＠◯◯＠" pattern（最大７文字）
 // "＠◯◯＠" -> "◯◯"
-bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
+bool RewriteSpecifiedWordAT(size_t key_pos, const char *begin, const char *end,
   size_t *mblen, std::string *output) {
   const char32_t first_char = Util::Utf8ToCodepoint(begin, end, mblen);
   if (first_char != 0xFF20 && first_char != 0x40) {  // !"＠@"
@@ -1129,14 +1129,133 @@ bool RewriteSpecifiedWord(size_t key_pos, const char *begin, const char *end,
 
 
   //ここから＠の３文字の表記指定書いていく～７文字まで
+  //７文字（最後）のときは、そこで終わりじゃなくてもreturn trueで終了
 
 
+}
 
 
+// "＃〇＃" pattern
+bool RewriteSpecifiedWordSharp(size_t key_pos, const char *begin, const char *end,
+  size_t *mblen, std::string *output) {
+  const char32_t first_char = Util::Utf8ToCodepoint(begin, end, mblen);
+  if (first_char != 0xFF03 && first_char != 0x23) {  // !"＃#"
+    *mblen = 0;
+    return false;
+  }
 
+  if (begin + *mblen >= end) { //１文字目で終わりのとき
+    *mblen = 0;
+    return false;
+  }
 
+  size_t mblen2 = 0;
+  const char32_t second_char =
+  Util::Utf8ToCodepoint(begin + *mblen, end, &mblen2);
 
+  if (begin + *mblen + mblen2 >= end) { //２文字目で終わりのとき
+    *mblen = 0;
+    return false;
+  }
 
+  size_t mblen3 = 0;
+  const char32_t third_char =
+  Util::Utf8ToCodepoint(begin + *mblen + mblen2, end, &mblen3);
+
+  uint16_t output_codepoint = 0x0000;
+  bool is_hited_at_third = false;  // ３文字目で該当したかどうか
+  if (third_char == 0xFF03 || third_char == 0x23) {  // "＃#"  ＃◯＃のとき
+    switch (second_char) {
+      case 0x306F:                  // "は"
+        output_codepoint = 0x306F;  // "は"
+        break;
+      case 0x306B:                  // "に"
+        output_codepoint = 0x306B;  // "に"
+        break;
+      case 0x306E:                  // "の"
+        output_codepoint = 0x306E;  // "の"
+        break;
+      case 0x304C:                  // "が"
+        output_codepoint = 0x304C;  // "が"
+        break;
+      case 0x3067:                  // "で"
+        output_codepoint = 0x3067;  // "で"
+        break;
+      case 0x3082:                  // "も"
+        output_codepoint = 0x3082;  // "も"
+        break;
+      default:
+        output_codepoint = 0x0000;
+        break;
+    }
+
+    if (output_codepoint != 0x0000) {
+      Util::CodepointToUtf8Append(output_codepoint, output);  // "表記指定外した読み"
+      if (begin + *mblen + mblen2 + mblen3 >= end) { //３文字目で終わりのとき
+        *mblen += mblen2 + mblen3;
+        return true;
+      }
+      is_hited_at_third = true;
+    }
+
+  }
+
+  if (begin + *mblen + mblen2 + mblen3 >= end) { //３文字目で終わりのとき
+    *mblen = 0;
+    return false;
+  }
+
+  size_t mblen4 = 0;
+  const char32_t fourth_char =
+  Util::Utf8ToCodepoint(begin + *mblen + mblen2 + mblen3, end, &mblen4);
+
+  uint16_t output_codepoint1 = 0x0000; //出力１文字目
+  uint16_t output_codepoint2 = 0x0000; //出力２文字目
+  if (fourth_char == 0xFF03 || fourth_char == 0x23) {  // "＃#"  ＃◯◯＃のとき
+    switch (second_char) {
+      case 0x306B:                  // "に"
+        if (third_char == 0x306F){  // "は" ＠には＠
+          output_codepoint1 = 0x306B;  // "に"
+          output_codepoint2 = 0x306F;  // "は"
+        } else if (third_char == 0x3082){ // "も" ＠にも＠
+          output_codepoint1 = 0x306B;  // "に"
+          output_codepoint2 = 0x3082;  // "も"
+        }
+        break;
+      case 0x3067:                  // "で"
+        if (third_char == 0x3082){  // "も" ＠でも＠
+          output_codepoint1 = 0x3067;  // "で"
+          output_codepoint2 = 0x3082;  // "も"
+        } else if (third_char == 0x306F){ // "は" ＠では＠
+          output_codepoint1 = 0x3067;  // "で"
+          output_codepoint2 = 0x306F;  // "は"
+        }
+        break;
+      default:
+        output_codepoint1 = 0x0000;
+        output_codepoint2 = 0x0000;
+        break;
+    }
+
+    if (output_codepoint1 != 0x0000) {
+      Util::CodepointToUtf8Append(output_codepoint1, output);  // "表記指定外した読み１"
+      if (output_codepoint2 != 0x0000) {
+        Util::CodepointToUtf8Append(output_codepoint2, output);  // "表記指定外した読み２"
+      }
+      *mblen += mblen2 + mblen3 + mblen4;
+      return true;
+      }
+    }
+    
+  }
+
+  if (is_hited_at_third) { //３文字目ひっとしたとき
+    *mblen += mblen2 + mblen3;
+    return true;
+  }
+
+  *mblen = 0;
+  return false;
 }
 
 
@@ -1194,7 +1313,8 @@ bool KeyCorrector::CorrectKey(absl::string_view key, InputMode mode,
          !RewriteYu(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteNI(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteSmallTSU(key_pos, begin, end, &mblen, &corrected_key_) &&
-         !RewriteSpecifiedWord(key_pos, begin, end, &mblen, &corrected_key_) &&
+         !RewriteSpecifiedWordAT(key_pos, begin, end, &mblen, &corrected_key_) &&
+         !RewriteSpecifiedWordSharp(key_pos, begin, end, &mblen, &corrected_key_) &&
          !RewriteM(key_pos, begin, end, &mblen, &corrected_key_))) {
       const char32_t codepoint = Util::Utf8ToCodepoint(begin, end, &mblen);
       Util::CodepointToUtf8Append(codepoint, &corrected_key_);
