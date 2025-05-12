@@ -105,6 +105,7 @@
           '<(mozc_oss_src_dir)/data/dictionary_oss/mozcdic-ut0425わ.txt',
           '<(mozc_oss_src_dir)/data/dictionary_oss/mozcdic-ut0425を.txt',
           '<(mozc_oss_src_dir)/data/dictionary_oss/mozcdic-ut0425ん.txt',
+          '<(mozc_oss_src_dir)/data/dictionary_oss/mozcdic-ut0425記号.txt',
           '<(mozc_oss_src_dir)/data/dictionary_oss/suggestion_filter.txt',
         ],
         'test_data_subdir': 'data/dictionary_oss',
