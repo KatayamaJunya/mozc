@@ -68,7 +68,7 @@ class OssDataManagerTest : public DataManagerTestBase {
                  "mozcdic-ut0425ゆ.txt", "mozcdic-ut0425よ.txt", "mozcdic-ut0425ら.txt",
                  "mozcdic-ut0425り.txt", "mozcdic-ut0425る.txt", "mozcdic-ut0425れ.txt",
                  "mozcdic-ut0425ろ.txt", "mozcdic-ut0425わ.txt", "mozcdic-ut0425を.txt",
-                 "mozcdic-ut0425ん.txt"}
+                 "mozcdic-ut0425ん.txt", "mozcdic-ut0425記号.txt"}
 #else  // MOZC_GYP_BUILD
                 {"aux_dictionary.txt", "dictionary.txt"}
 #endif  // MOZC_GYP_BUILD
