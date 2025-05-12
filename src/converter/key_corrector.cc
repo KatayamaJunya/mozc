@@ -1214,19 +1214,19 @@ bool RewriteSpecifiedWordSharp(size_t key_pos, const char *begin, const char *en
   if (fourth_char == 0xFF03 || fourth_char == 0x23) {  // "＃#"  ＃◯◯＃のとき
     switch (second_char) {
       case 0x306B:                  // "に"
-        if (third_char == 0x306F){  // "は" ＠には＠
+        if (third_char == 0x306F){  // "は" ＃には＃
           output_codepoint1 = 0x306B;  // "に"
           output_codepoint2 = 0x306F;  // "は"
-        } else if (third_char == 0x3082){ // "も" ＠にも＠
+        } else if (third_char == 0x3082){ // "も" ＃にも＃
           output_codepoint1 = 0x306B;  // "に"
           output_codepoint2 = 0x3082;  // "も"
         }
         break;
       case 0x3067:                  // "で"
-        if (third_char == 0x3082){  // "も" ＠でも＠
+        if (third_char == 0x3082){  // "も" ＃でも＃
           output_codepoint1 = 0x3067;  // "で"
           output_codepoint2 = 0x3082;  // "も"
-        } else if (third_char == 0x306F){ // "は" ＠では＠
+        } else if (third_char == 0x306F){ // "は" ＃では＃
           output_codepoint1 = 0x3067;  // "で"
           output_codepoint2 = 0x306F;  // "は"
         }
@@ -1244,12 +1244,11 @@ bool RewriteSpecifiedWordSharp(size_t key_pos, const char *begin, const char *en
       }
       *mblen += mblen2 + mblen3 + mblen4;
       return true;
-      }
     }
     
   }
 
-  if (is_hited_at_third) { //３文字目ひっとしたとき
+  if (is_hited_at_third) { //３文字目ヒットしたとき
     *mblen += mblen2 + mblen3;
     return true;
   }
