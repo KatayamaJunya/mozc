@@ -107,6 +107,7 @@ filegroup(
         "mozcdic-ut0425わ.txt",
         "mozcdic-ut0425を.txt",
         "mozcdic-ut0425ん.txt",
+        "mozcdic-ut0425記号.txt",
         "//dictionary:zip_code_data",
     ],
     visibility = ["//visibility:private"],
