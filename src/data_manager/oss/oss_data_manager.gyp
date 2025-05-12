@@ -88,6 +88,7 @@
       '<(platform_data_dir)/mozcdic-ut0425わ.txt',
       '<(platform_data_dir)/mozcdic-ut0425を.txt',
       '<(platform_data_dir)/mozcdic-ut0425ん.txt',
+      '<(platform_data_dir)/mozcdic-ut0425記号.txt',
       '<(mozc_oss_src_dir)/data/dictionary_manual/domain.txt',
     ],
     # Hex-escaped string of "\xEFMOZC\r\n"
