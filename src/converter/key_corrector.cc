@@ -1307,9 +1307,9 @@ bool RewriteSpecifiedWordYen(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x3061:                  // "ち"
-        if (third_char == 0x304B && fourth_char == 0x304F){  // "ゃく" ￥ちゃく￥
+        if (third_char == 0x3083 && fourth_char == 0x304F){  // "ゃく" ￥ちゃく￥
           output_codepoint1 = 0x3061;  // "ち"
-          output_codepoint2 = 0x304B;  // "ゃ"
+          output_codepoint2 = 0x3083;  // "ゃ"
           output_codepoint3 = 0x304F;  // "く"
         } else if (third_char == 0x3087 && fourth_char == 0x3046){  // "ょう" ￥ちょう￥
           output_codepoint1 = 0x3061;  // "ち"
@@ -1317,7 +1317,7 @@ bool RewriteSpecifiedWordYen(size_t key_pos, const char *begin, const char *end,
           output_codepoint3 = 0x3046;  // "う"
         } else if (third_char == 0x3088 && fourth_char == 0x3046){  // "よう" ￥ちよう￥
           output_codepoint1 = 0x3061;  // "ち"
-          output_codepoint2 = 0x3088;  // "よ"
+          output_codepoint2 = 0x3087;  // "ょ"
           output_codepoint3 = 0x3046;  // "う"
         }
         break;
@@ -1375,7 +1375,7 @@ bool RewriteSpecifiedWordYen(size_t key_pos, const char *begin, const char *end,
         }
         break;
       case 0x307A:                  // "ぺ"
-        if (third_char == 0x30FC && fourth_char == 0x3058){  // "ーじ" ￥ぶんの￥
+        if (third_char == 0x30FC && fourth_char == 0x3058){  // "ーじ" ￥ぺーじ￥
           output_codepoint1 = 0x307A;  // "ぺ"
           output_codepoint2 = 0x30FC;  // "ー"
           output_codepoint3 = 0x3058;  // "じ"
@@ -1865,11 +1865,20 @@ size_t KeyCorrector::GetOriginalOffset(const size_t original_key_pos,
 // static
 int KeyCorrector::GetCorrectedCostPenalty(absl::string_view key) {
   // "んん" and "っっ" must be mis-spelling.
-  if (absl::StrContains(key, "んん") || absl::StrContains(key, "っっ")) {
-    return 0;
+  //if (absl::StrContains(key, "んん") || absl::StrContains(key, "っっ")) {
+  //  return 0;
+  //}
+
+  // ＃ pattern add 100 to the original word cost
+  if (absl::StrContains(key, "＃") || absl::StrContains(key, "#")) {
+    return 100;
   }
-  // add 3000 to the original word cost
-  constexpr int kCorrectedCostPenalty = 100;
+  // ￥ pattern add 9000 to the original word cost
+  if (absl::StrContains(key, "￥") || absl::StrContains(key, "\\")) {
+    return 9000;
+  }
+  // In other cases, add 3000 to the original word cost
+  constexpr int kCorrectedCostPenalty = 3000;
   return kCorrectedCostPenalty;
 }
 
