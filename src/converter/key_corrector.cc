@@ -1546,14 +1546,6 @@ bool RewriteSpecifiedWordYen(size_t key_pos, const char *begin, const char *end,
           output_codepoint4 = 0x3044;  // "い"
         }
         break;
-      case 0x3053:                  // "こ"
-        if (third_char == 0x3046 && fourth_char == 0x308A && fifth_char == 0x3064){  // "うりつ" ￥こうりつ￥
-          output_codepoint1 = 0x3053;  // "こ"
-          output_codepoint2 = 0x3046;  // "う"
-          output_codepoint3 = 0x308A;  // "り"
-          output_codepoint4 = 0x3064;  // "つ"
-        }
-        break;
       case 0x305F:                  // "た"
         if (third_char == 0x304F && fourth_char == 0x3055 && fifth_char == 0x3093){  // "くさん" ￥たくさん￥
           output_codepoint1 = 0x305F;  // "た"
@@ -2276,9 +2268,9 @@ int KeyCorrector::GetCorrectedCostPenalty(absl::string_view key) {
   if (absl::StrContains(key, "＃") || absl::StrContains(key, "#")) {
     return 100;
   }
-  // ￥ pattern add 5000 to the original word cost
+  // ￥ pattern add 9000 to the original word cost
   if (absl::StrContains(key, "￥") || absl::StrContains(key, "\\")) {
-    return 5000;
+    return 9000;
   }
   // In other cases, add 3000 to the original word cost
   constexpr int kCorrectedCostPenalty = 3000;
